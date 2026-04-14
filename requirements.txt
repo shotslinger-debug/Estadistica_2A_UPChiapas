@@ -1,4 +1,4 @@
-streaamlib
+streamlit
 pandas
 numpy
 scipy
