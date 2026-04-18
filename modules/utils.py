@@ -1,10 +1,20 @@
-"""
-Utilidades matematicas para pruebas estadisticas.
+import numpy as np
+from scipy import stats
 
-Este modulo se deja preparado para agregar funciones de la prueba Z.
-"""
-
-
-def placeholder_prueba_z() -> str:
-    """Funcion temporal mientras se implementan calculos de prueba Z."""
-    return "Pendiente de implementacion de funciones Z."
+def calcular_prueba_z(media_muestra, media_h0, sigma, n, tipo_prueba="bilateral"):
+    """
+    Calcula el estadístico Z y el p-valor.
+    """
+    # Cálculo del estadístico Z
+    z_stat = (media_muestra - media_h0) / (sigma / np.sqrt(n))
+    
+    # Cálculo del p-valor según el tipo de prueba
+    if tipo_prueba == "bilateral":
+        p_value = stats.norm.sf(abs(z_stat)) * 2
+    elif tipo_prueba == "cola_derecha":
+        p_value = stats.norm.sf(z_stat)
+    else:  # cola_izquierda
+        p_value = stats.norm.cdf(z_stat)
+        
+    return z_stat, p_value
+    

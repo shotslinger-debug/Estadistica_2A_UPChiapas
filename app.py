@@ -8,8 +8,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from matplotlib.lines import Line2D
 import seaborn as sns
-from utils import calcular_prueba_z
-
+from modules.utils import calcular_prueba_z
 CHART_FACE = "#1A1D27"
 # |skewness| < este umbral → "simétrica / sin sesgo marcado" (criterio habitual en aplicaciones)
 UMBRAL_SESGO_SIMETRIA = 0.5
@@ -420,7 +419,7 @@ def render_prueba_z(datos: pd.DataFrame) -> None:
         )
         return
 
-mapeo_tipos = {
+    mapeo_tipos = {
         "Bilateral (H₁: μ ≠ μ₀)": "bilateral",
         "Unilateral derecha (H₁: μ > μ₀)": "cola_derecha",
         "Unilateral izquierda (H₁: μ < μ₀)": "cola_izquierda"
@@ -533,15 +532,12 @@ mapeo_tipos = {
             f"(p = {p_valor:.4e} ≥ α)."
         )
 
-
-# ═══════════════════════════════════════════════════════════════════════════════
 GEMINI_FLASH_MODEL = "gemini-flash-latest" 
 
 GEMINI_GENERATE_URL = (
     f"https://generativelanguage.googleapis.com/v1beta/models/"
     f"{GEMINI_FLASH_MODEL}:generateContent"
 )
-
 
 def _gemini_generate_via_requests(api_key: str, user_text: str) -> str:
     key = str(api_key).strip()
@@ -578,7 +574,6 @@ def _gemini_generate_via_requests(api_key: str, user_text: str) -> str:
     texts = [p.get("text", "") for p in parts if isinstance(p, dict)]
     out = "".join(texts).strip()
     return out if out else "(Respuesta vacía.)"
-
 
 def _resumen_distribucion_para_prompt(serie: pd.Series, col: str) -> str:
     """Resumen para la IA: descriptivos, Shapiro-Wilk y conteo IQR de outliers."""
@@ -626,8 +621,6 @@ def _resumen_distribucion_para_prompt(serie: pd.Series, col: str) -> str:
     )
     return "\n".join(lines)
 
-
-# ═══════════════════════════════════════════════════════════════════════════════
 def render_asistente_gemini(api_key: str) -> None:
     st.subheader("4 · Asistente IA (Gemini)")
     key_ok = bool(api_key and str(api_key).strip())
@@ -833,8 +826,6 @@ def render_asistente_gemini(api_key: str) -> None:
                 except Exception as exc:
                     st.error(f"No se pudo obtener respuesta de Gemini: {exc}")
 
-
-# ═══════════════════════════════════════════════════════════════════════════════
 if seccion == SECCIONES[0]:
     st.divider()
     render_carga_datos()
